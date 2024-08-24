@@ -1,3 +1,4 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
 import {
     LTRemarkRegular,
     LTRemarkItalic,
@@ -6,7 +7,13 @@ import {
 
 import Header from "@/components/Header";
 
-export default function Home() {
+export default async function Home() {
+  // const user = await currentUser();
+  // console.log(user);
+
+  const { userId } = auth();
+  console.log(userId);
+
     return (
         <main>
             <div>
