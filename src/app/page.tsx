@@ -1,5 +1,4 @@
 'use client'
-import './page.css'
 import { useState, useEffect, ChangeEvent } from 'react';
 import { Container, Button, TextField, Box, Typography } from '@mui/material';
 
@@ -39,7 +38,7 @@ export default function Home() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const result = e.target?.result;
         if (typeof result === 'string') {
-          //const replacement = result
+          // Here I assume the line break is formatted like this for now
           const replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n "); 
           const wordsList = replacement.split(' ');
           setTextArray(wordsList);
@@ -51,53 +50,6 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: '20px' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-        <Button
-          variant="contained"
-          component="label"
-          fullWidth
-          sx={{ marginBottom: 2 }}
-        >
-          Upload File
-          <input
-            type="file"
-            hidden
-            onChange={e => {
-              // Set file name and display in center box
-              const file: string = e.target.value;
-              setFileName(file.slice(-(file.lastIndexOf("\\") - 1)));
-              handleFileUpload(e);
-            }}
-          />
-        </Button>
-        <Typography>{fileName != '' ? "File displayed: " + fileName : ""}</Typography>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="top"
-          height="90vh"
-          width="50vw"
-          textAlign="left"
-          border={1}
-        >
-          <Typography className='prevent-select' variant="body1" 
-          component="p" 
-          display={"inline"} 
-          sx={{
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            width: '100%',
-            margin: 0
-          }}>
-            {textArray.map((word, index) => (
-              <span key={index} onClick={() => handleTextSelect(index)}>
-                {word.includes("\n")? word : word + " " }
-              </span>
-            ))}
-          </Typography>
-        </Box>
-      </Box>
-    </Container>
+    <></>
   );
 }
