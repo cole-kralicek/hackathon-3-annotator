@@ -7,6 +7,9 @@ import {
 } from '@clerk/nextjs'
 
 import { LTRemarkRegular } from '../../styles/fonts'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+import "@/app/globals.css"
 
 export default function RootLayout({
   children,
@@ -14,9 +17,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
       <html lang="en">
+        <ClerkProvider>
         <body className={LTRemarkRegular.className}>
+          <Nav />
           <SignedOut>
             <SignInButton />
           </SignedOut>
@@ -24,8 +28,9 @@ export default function RootLayout({
             <UserButton />
           </SignedIn>
           {children}
+          <Footer />
         </body>
+        </ClerkProvider>
       </html>
-    </ClerkProvider>
   )
 }
