@@ -1,38 +1,62 @@
+'use client'
+import { useState, useEffect, ChangeEvent } from 'react';
+import { Container, Button, TextField, Box, Typography } from '@mui/material';
 import { auth, currentUser } from "@clerk/nextjs/server";
-import {
-    LTRemarkRegular,
-    LTRemarkItalic,
-    LTRemarkBold,
-} from "../../styles/fonts";
 
-import Header from "@/components/Header";
-
-export default async function Home() {
+export default function Home() {
   // const user = await currentUser();
   // console.log(user);
 
   const { userId } = auth();
   console.log(userId);
+  
+  // Text to be displayed in center box
+  const [textArray, setTextArray] = useState<string[]>([]);
+  // Name of file displayed
+  const [fileName, setFileName] = useState<string>('');
+  // Save highlighted text
+  const [highlightedText, setHighlightedText] = useState<string | null>();
+  // Highlight mode selection (aka words or partial)
+  const [highlightFullWords, setHighlightFullWords] = useState<boolean>(true)
 
-    return (
-        <main>
-            <div>
-                <Header />
-                <p className={LTRemarkRegular.className}>Hello, World!</p>
-                <p className={LTRemarkItalic.className}>Hello, World!</p>
-                <p className={LTRemarkBold.className}>Hello, World!</p>
-            </div>
-            <div className="flex flex-col items-center justify-center min-w-screen min-h-screen bg-slate-500">
-                <h1 className="text-6xl font-bold text-center">
-                    Welcome to <a href="https://nextjs.org">Next.js!</a>
-                </h1>
-                <p className="mt-3 text-2xl">
-                    Get started by editing{" "}
-                    <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-                        pages/index.js
-                    </code>
-                </p>
-            </div>
-        </main>
-    );
+
+  const handleTextSelect = (index: number) => {
+    if (!highlightFullWords) {
+      const selected = window.getSelection()
+      if (selected && selected.rangeCount > 0) {
+        console.log(selected.toString())
+        console.log(selected.getRangeAt(0).endOffset)
+        setHighlightedText(window.getSelection()?.toString())
+        const range = selected?.getRangeAt(0).getBoundingClientRect()
+        console.log(range)
+      }
+    }
+    else {
+      console.log(textArray[index])
+    }
+
+  }
+
+  // Function to convert file upload into array of strings for DB storage
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          // Here I assume the line break is formatted like this for now
+          const replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n "); 
+          const wordsList = replacement.split(' ');
+          setTextArray(wordsList);
+          console.log(wordsList);
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  return (
+    <></>
+  );
 }
