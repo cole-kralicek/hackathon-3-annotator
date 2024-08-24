@@ -1,8 +1,15 @@
 'use client'
 import { useState, useEffect, ChangeEvent } from 'react';
 import { Container, Button, TextField, Box, Typography } from '@mui/material';
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default function Home() {
+  // const user = await currentUser();
+  // console.log(user);
+
+  const { userId } = auth();
+  console.log(userId);
+  
   // Text to be displayed in center box
   const [textArray, setTextArray] = useState<string[]>([]);
   // Name of file displayed
