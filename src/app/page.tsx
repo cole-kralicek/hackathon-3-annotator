@@ -1,10 +1,39 @@
 'use client'
-import { useState, ChangeEvent } from 'react';
-import { Container, Button, TextField, Box } from '@mui/material';
+import { useState, useEffect, ChangeEvent } from 'react';
+import { Container, Button, TextField, Box, Typography } from '@mui/material';
 
 export default function Home() {
-  const [text, setText] = useState<string>('');
+  // Text to be displayed in center box
+  const [textArray, setTextArray] = useState<string[]>([]);
+  // Name of file displayed
+  const [fileName, setFileName] = useState<string>('');
+  // Save highlighted text
+  const [highlightedText, setHighlightedText] = useState<string | null>();
+  // Highlight mode selection (aka words or partial)
+  const [highlightFullWords, setHighlightFullWords] = useState<boolean>(false)
 
+  useEffect(() => {
+    console.log("A")
+  }, [])
+
+  const handleTextSelect = () => {
+    if (!highlightFullWords) {
+      const selected = window.getSelection()
+      if (selected && selected.rangeCount > 0) {
+        console.log(selected.toString())
+        console.log(selected.getRangeAt(0).endOffset)
+        setHighlightedText(window.getSelection()?.toString())
+        const range = selected?.getRangeAt(0).getBoundingClientRect()
+        console.log(range)
+      }
+    }
+    else {
+      
+    }
+
+  }
+
+  // Function to convert file upload into array of strings for DB storage
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -12,7 +41,9 @@ export default function Home() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const result = e.target?.result;
         if (typeof result === 'string') {
-          setText(result);
+          const wordsList = result.split(' ');
+          setTextArray(wordsList);
+          console.log(wordsList);
         }
       };
       reader.readAsText(file);
@@ -32,19 +63,28 @@ export default function Home() {
           <input
             type="file"
             hidden
-            onChange={handleFileUpload}
+            onChange={e => {
+              // Set file name and display in center box
+              const file: string = e.target.value;
+              setFileName(file.slice(-(file.lastIndexOf("\\") - 1)));
+              handleFileUpload(e);
+            }}
           />
         </Button>
-        <TextField
-          value={text}
-          multiline
-          rows={20}
-          variant="outlined"
-          fullWidth
-          InputProps={{
-            readOnly: true,
-          }}
-        />
+        <Typography>{fileName != '' ? "File displayed: " + fileName : ""}</Typography>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="top"
+          height="90vh"
+          textAlign="left"
+          border={1}
+
+        >
+          <Typography variant="body1" component="p" onMouseUp={handleTextSelect}>
+            {textArray.join(' ')}
+          </Typography>
+        </Box>
       </Box>
     </Container>
   );
