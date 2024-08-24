@@ -8,29 +8,62 @@ export default function Home() {
   const [textArray, setTextArray] = useState<string[]>([]);
   // Name of file displayed
   const [fileName, setFileName] = useState<string>('');
-  // Save highlighted text
+  // Save highlighted words and indices
   const [highlightedText, setHighlightedText] = useState<string | null>();
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
   // Highlight mode selection (aka words or partial)
   const [highlightFullWords, setHighlightFullWords] = useState<boolean>(true)
 
 
-  const handleTextSelect = (index: number) => {
-    if (!highlightFullWords) {
-      const selected = window.getSelection()
-      if (selected && selected.rangeCount > 0) {
-        console.log(selected.toString())
-        console.log(selected.getRangeAt(0).endOffset)
-        setHighlightedText(window.getSelection()?.toString())
-        const range = selected?.getRangeAt(0).getBoundingClientRect()
-        console.log(range)
-      }
-    }
-    else {
-        setHighlightedText(textArray[index])
-      console.log(textArray[index])
-    }
+  // const handleTextSelect = (index: number) => {
+  //   if (!highlightFullWords) {
+  //     const selected = window.getSelection()
+  //     if (selected && selected.rangeCount > 0) {
+  //       console.log(selected.toString())
+  //       console.log(selected.getRangeAt(0).endOffset)
+  //       setHighlightedText(window.getSelection()?.toString())
+  //       const range = selected?.getRangeAt(0).getBoundingClientRect()
+  //       console.log(range)
+  //     }
+  //   }
+  //   else {
+  //       setHighlightedText(textArray[index])
+  //     console.log(textArray[index])
+  //   }
 
-  }
+  // }
+
+  // Update highlighted "words" for each new index selected
+  useEffect(() => {
+    const currentSelected: any = []
+    selectedIndices.forEach((index) => currentSelected.push(textArray[index]))
+    setHighlightedText(currentSelected.join(" "))
+  }, [selectedIndices])
+
+  const handleMouseDown = (index: number) => {
+    setIsMouseDown(true);
+    if (!selectedIndices.includes(index)) {
+      setSelectedIndices([index]); //Begin recording selected indices
+    }
+  };
+
+  const handleMouseEnter = (index: number) => {
+    if (isMouseDown) {
+      setSelectedIndices(prev => {
+        if (!prev.includes(index)) {
+          return [...prev, index]; // Add index to the selection
+        }
+        return prev.sort();
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+    // Finalize the selection
+    console.log("Selected word indices:", selectedIndices);
+  };
 
   // Function to convert file upload into array of strings for DB storage
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +126,15 @@ export default function Home() {
             margin: 0
           }}>
             {textArray.map((word, index) => (
-              <span key={index} onClick={() => handleTextSelect(index)}>
+              <span key={index} 
+              onMouseDown={() => handleMouseDown(index)}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseUp={handleMouseUp}
+              style={{
+                backgroundColor: selectedIndices.includes(index) ? 'yellow' : 'transparent',
+                cursor: 'pointer',
+                padding: '0 2px',
+              }}>
                 {word.includes("\n")? word : word + " " }
               </span>
             ))}
