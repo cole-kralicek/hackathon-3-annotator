@@ -1,4 +1,5 @@
 'use client'
+import './page.css'
 import { useState, useEffect, ChangeEvent } from 'react';
 import { Container, Button, TextField, Box, Typography } from '@mui/material';
 
@@ -10,13 +11,10 @@ export default function Home() {
   // Save highlighted text
   const [highlightedText, setHighlightedText] = useState<string | null>();
   // Highlight mode selection (aka words or partial)
-  const [highlightFullWords, setHighlightFullWords] = useState<boolean>(false)
+  const [highlightFullWords, setHighlightFullWords] = useState<boolean>(true)
 
-  useEffect(() => {
-    console.log("A")
-  }, [])
 
-  const handleTextSelect = () => {
+  const handleTextSelect = (index: number) => {
     if (!highlightFullWords) {
       const selected = window.getSelection()
       if (selected && selected.rangeCount > 0) {
@@ -28,7 +26,7 @@ export default function Home() {
       }
     }
     else {
-      
+      console.log(textArray[index])
     }
 
   }
@@ -41,7 +39,9 @@ export default function Home() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const result = e.target?.result;
         if (typeof result === 'string') {
-          const wordsList = result.split(' ');
+          //const replacement = result
+          const replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n "); 
+          const wordsList = replacement.split(' ');
           setTextArray(wordsList);
           console.log(wordsList);
         }
@@ -77,12 +77,24 @@ export default function Home() {
           justifyContent="center"
           alignItems="top"
           height="90vh"
+          width="50vw"
           textAlign="left"
           border={1}
-
         >
-          <Typography variant="body1" component="p" onMouseUp={handleTextSelect}>
-            {textArray.join(' ')}
+          <Typography className='prevent-select' variant="body1" 
+          component="p" 
+          display={"inline"} 
+          sx={{
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            width: '100%',
+            margin: 0
+          }}>
+            {textArray.map((word, index) => (
+              <span key={index} onClick={() => handleTextSelect(index)}>
+                {word.includes("\n")? word : word + " " }
+              </span>
+            ))}
           </Typography>
         </Box>
       </Box>
