@@ -1,4 +1,6 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
+import "./Annotator.css"
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Comment from "./Comment";
 import { Label } from "./ui/label";
@@ -56,6 +58,8 @@ const Annotator = () => {
         Fix: "#f73131",
     };
 
+    //LLM response
+    const [output, setOutput] = useState<string>('');
     // Text to be displayed in center box
     const [textArray, setTextArray] = useState<string[]>([]);
     // Name of file displayed
@@ -108,14 +112,14 @@ const Annotator = () => {
             const reader = new FileReader();
             reader.onload = (e: ProgressEvent<FileReader>) => {
                 const result = e.target?.result;
-                if (typeof result === "string") {
+                if (result) {
+                    generateText(result)
+                }
+                if (typeof result === 'string') {
                     // Here I assume the line break is formatted like this for now
-                    let replacement = result.replaceAll(
-                        "\r\n\r\n",
-                        " \r\n\r\n "
-                    );
-                    replacement = replacement.replaceAll("'", "&apos;");
-                    const wordsList = replacement.split(" ");
+                    let replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
+                    replacement = replacement.replaceAll("'", "&apos;")
+                    const wordsList = replacement.split(' ');
                     setTextArray(wordsList);
                     console.log(wordsList);
                 }
@@ -123,6 +127,28 @@ const Annotator = () => {
             reader.readAsText(file);
         }
     };
+
+    const generateText = async (prompt: string | ArrayBuffer) => {
+        try {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ body: prompt })
+            })
+
+            const data = await response.json()
+            if (response.ok) {
+                setOutput(data.output)
+            } else {
+                setOutput(data.error)
+            }
+
+        } catch (error) {
+            console.log("Post request error: %s", error)
+        }
+    }
 
     // Update highlighted "words" for each new index selected
     useEffect(() => {
@@ -267,6 +293,7 @@ const Annotator = () => {
     };
 
     return (
+        <>
         <section className="container relative flex flex-col md:flex-row items-start gap-8 pt-8 px-8 md:px-12 lg:px-20 sm:gap-10 min-h-[calc(100vh-200px)]">
             <div className="relative flex flex-col items-center gap-4 w-full rounded-md p-4 bg-foreground text-background md:w-1/2 lg:w-3/4">
                 {textArray.length === 0 && (
@@ -292,7 +319,13 @@ const Annotator = () => {
                         {fileName}
                     </Badge>
                 )}
-                <ScrollArea className="h-[70vh] w-full text-sm mt-4 pl-4 pr-6 pb-4">
+                <ScrollArea className="prevent-select h-[70vh] w-full text-sm mt-4 pl-4 pr-6 pb-4"
+                style={{
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    width: '100%',
+                    margin: 0
+                }}>
                     {textArray.map((word, index) => {
                         const isHighlighted =
                             selectedIndices.includes(index) ||
@@ -398,14 +431,15 @@ const Annotator = () => {
                             value={textComment}
                             onChange={(e) => setTextComment(e.target.value)}
                         />
-                        <Select>
+                        <Select
+                            onValueChange={(value) => setTag({ tag: value, color: colorMap[value as keyof typeof colorMap] })}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Tag" />
+                                <SelectValue placeholder={tag.tag} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="improve">Improve</SelectItem>
-                                <SelectItem value="change">Change</SelectItem>
-                                <SelectItem value="fix">Fix</SelectItem>
+                                <SelectItem value="Positive">Positive</SelectItem>
+                                <SelectItem value="Suggestion">Suggestion</SelectItem>
+                                <SelectItem value="Fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
 
@@ -743,6 +777,19 @@ const Annotator = () => {
                 </div>
             )}
         </section>
+        <section className="container relative flex flex-col items-center px-8 mt-12 mb-20 md:px-12 lg:px-20">
+        <Card className="flex flex-col gap-2 w-full">
+            <CardHeader className="px-12">
+                <CardTitle className="text-2xl font-semibold">
+                    Summary
+                </CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">
+                    {output}
+                </CardDescription>
+            </CardHeader>
+        </Card>
+    </section>
+    </>
     );
 };
 

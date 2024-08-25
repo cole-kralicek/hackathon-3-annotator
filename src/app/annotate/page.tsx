@@ -6,7 +6,7 @@ const AnnotatePage = () => {
     return (
         <>
             <Annotator />
-            <LLMSummary />
+            {/* <LLMSummary /> */}
         </>
     );
 };
