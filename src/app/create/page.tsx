@@ -6,7 +6,7 @@ import UploadFile from "@/components/UploadFile";
 import { cn } from "@/lib/utils";
 
 const UploadPage = () => {
-    const [selected, setSelected] = useState("manual");
+    const [selected, setSelected] = useState("upload");
 
     const tabs = [
         // { id: "manual", label: "Manual Entry" },
