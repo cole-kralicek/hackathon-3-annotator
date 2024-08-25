@@ -20,13 +20,16 @@ import {
     Trash,
     Upload,
     Video,
+    FileAudio,
     X,
+    ExternalLink,
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import Link from "next/link";
 
 const AnnotatePage = () => {
     const [textArray, setTextArray] = useState<string[]>([]);
@@ -164,62 +167,11 @@ const AnnotatePage = () => {
         console.log("Files:", files);
     };
 
-    // bg-[var(--card)] text-foreground
-
     return (
         <section className="container relative flex flex-col md:flex-row items-start gap-8 pt-8 px-8 md:px-12 lg:px-20 sm:gap-10 min-h-[calc(100vh-200px)]">
             <div className="flex flex-col items-center gap-4 w-full rounded-md p-4 bg-foreground text-background md:w-1/2 lg:w-3/4">
                 <ScrollArea className="h-[70vh] w-full text-sm mt-4 pl-4 pr-6 pb-4">
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    And once they started laughing, they couldn't stop. Jokester
-                    began sneaking into the castle in the middle of the night
-                    and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
-                    Jokester began sneaking into the castle in the middle of the
-                    night and leaving jokes all over the place: under the king's
-                    pillow, in his soup, even in the royal toilet. The king was
-                    furious, but he couldn't seem to stop Jokester. And then,
-                    one day, the people of the kingdom discovered that the jokes
-                    left by Jokester were so funny that they couldn't help but
-                    laugh. And once they started laughing, they couldn't stop.
+                    text
                 </ScrollArea>
             </div>
             <div className="hidden md:flex flex-col h-[75vh] items-center gap-4 w-full md:w-1/2 lg:w-1/4">
@@ -229,17 +181,25 @@ const AnnotatePage = () => {
 
                 <ScrollArea className="h-[100%] w-full">
                     <div className="flex flex-col flex-1 gap-4">
-                        {comment.map((comment, index) => (
-                            <Comment
-                                key={index}
-                                username={comment.username}
-                                firstName={comment.firstName}
-                                lastName={comment.lastName}
-                                userImage={comment.userImage}
-                                comment={comment.comment}
-                                tag={comment.tag}
-                            />
-                        ))}
+                        {comment.length === 0 && (
+                            <div className="flex items-center justify-center w-full">
+                                <h3 className="text-muted-foreground mt-12">
+                                    No comments yet. Make one below!
+                                </h3>
+                            </div>
+                        )}
+                        {comment.length > 0 &&
+                            comment.map((comment, index) => (
+                                <Comment
+                                    key={index}
+                                    username={comment.username}
+                                    firstName={comment.firstName}
+                                    lastName={comment.lastName}
+                                    userImage={comment.userImage}
+                                    comment={comment.comment}
+                                    tag={comment.tag}
+                                />
+                            ))}
                     </div>
                 </ScrollArea>
                 <Separator className="pt-auto" />
@@ -277,28 +237,54 @@ const AnnotatePage = () => {
                                                     <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px] cursor-pointer">
                                                         {file.type.includes(
                                                             "image"
-                                                        ) && (
+                                                        ) ? (
                                                             <Image size={18} />
-                                                        )}
-                                                        {file.type.includes(
-                                                            "video"
-                                                        ) && (
+                                                        ) : file.type.includes(
+                                                              "video"
+                                                          ) ? (
                                                             <Video size={18} />
+                                                        ) : file.type.includes(
+                                                              "pdf"
+                                                          ) ? (
+                                                            <File size={18} />
+                                                        ) : file.type.includes(
+                                                              "audio"
+                                                          ) ? (
+                                                            <FileAudio
+                                                                size={18}
+                                                            />
+                                                        ) : (
+                                                            <File size={18} />
                                                         )}
-                                                        {file.type.includes(
-                                                            "pdf"
-                                                        ) && <File size={18} />}
                                                     </div>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent side="top">
                                                     <div className="flex flex-col gap-1 p-2 max-w-[240px]">
                                                         <p className="font-semibold text-sm">
-                                                            File:{" "}
-                                                            {file.name}
+                                                            File: {file.name}
                                                         </p>
                                                         <p className="text-sm">
                                                             Type: {file.type}
                                                         </p>
+                                                        <Link
+                                                            href={URL.createObjectURL(
+                                                                file
+                                                            )}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs"
+                                                        >
+                                                            <Button
+                                                                type="button"
+                                                                className="text-xs w-full mt-3"
+                                                            >
+                                                                Open
+                                                                <ExternalLink
+                                                                    size={14}
+                                                                    className="ml-1"
+                                                                />
+                                                            </Button>
+                                                        </Link>
                                                         <Button
                                                             type="button"
                                                             onClick={() =>
@@ -429,21 +415,29 @@ const AnnotatePage = () => {
                                                         <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px] cursor-pointer">
                                                             {file.type.includes(
                                                                 "image"
-                                                            ) && (
+                                                            ) ? (
                                                                 <Image
                                                                     size={18}
                                                                 />
-                                                            )}
-                                                            {file.type.includes(
-                                                                "video"
-                                                            ) && (
+                                                            ) : file.type.includes(
+                                                                  "video"
+                                                              ) ? (
                                                                 <Video
                                                                     size={18}
                                                                 />
-                                                            )}
-                                                            {file.type.includes(
-                                                                "pdf"
-                                                            ) && (
+                                                            ) : file.type.includes(
+                                                                  "pdf"
+                                                              ) ? (
+                                                                <File
+                                                                    size={18}
+                                                                />
+                                                            ) : file.type.includes(
+                                                                  "audio"
+                                                              ) ? (
+                                                                <FileAudio
+                                                                    size={18}
+                                                                />
+                                                            ) : (
                                                                 <File
                                                                     size={18}
                                                                 />
@@ -460,6 +454,27 @@ const AnnotatePage = () => {
                                                                 Type:{" "}
                                                                 {file.type}
                                                             </p>
+                                                            <Link
+                                                                href={URL.createObjectURL(
+                                                                    file
+                                                                )}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs"
+                                                            >
+                                                                <Button
+                                                                    type="button"
+                                                                    className="text-xs w-full mt-3"
+                                                                >
+                                                                    Open
+                                                                    <ExternalLink
+                                                                        size={
+                                                                            14
+                                                                        }
+                                                                        className="ml-1"
+                                                                    />
+                                                                </Button>
+                                                            </Link>
                                                             <Button
                                                                 type="button"
                                                                 onClick={() =>
