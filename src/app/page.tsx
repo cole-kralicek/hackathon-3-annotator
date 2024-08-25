@@ -5,6 +5,7 @@ import AnnotatePage from "@/components/AnnotatePage";
 import LLMSummary from "@/components/LLMSummary";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import LandingPage from "@/components/LandingPage";
+import Dashboard from "@/components/Dashboard";
 // import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default function Home() {
@@ -63,6 +64,7 @@ export default function Home() {
     return (
         <>
             <SignedIn>
+                {/* <Dashboard /> */}
                 <AnnotatePage />
                 <LLMSummary />
             </SignedIn>
