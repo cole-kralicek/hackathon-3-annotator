@@ -1,14 +1,17 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-const awsCredetnials = {
-  accessKeyId: process.env.AWS_ACCOUNT_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_ACCOUNT_SECRET_KEY,
+import * as dotenv from 'dotenv'; 
+dotenv.config(); 
+
+const awsCredentials = {
+  accessKeyId: process.env.AWS_CCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
 };
 
 const dynamoConfig = {
-  region: process.env.AWS_ACCOUNT_REGION,
-  credentials: awsCredetnials,
+  region: process.env.AWS_REGION,
+  credentials: awsCredentials,
 } as {
   credentials: {
     accessKeyId: string;

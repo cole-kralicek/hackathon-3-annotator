@@ -1,7 +1,7 @@
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { NextResponse } from "next/server";
 import { db } from "../../../config";
-import GetCurrentUser from "../../../utils/db/get-current-user";
+import { GetCurrentUser } from "../../../utils/db/get-current-user";
 
 export async function POST() {
   const user = await GetCurrentUser();

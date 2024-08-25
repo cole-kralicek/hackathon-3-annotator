@@ -5,7 +5,6 @@ import { GetCurrentUser } from '../../utils/db/get-current-user';
 
 const Header = () => {
   const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
@@ -14,16 +13,10 @@ const Header = () => {
         setUser(userData);
       } catch (error) {
         console.error('Error fetching user:', error);
-      } finally {
-        setLoading(false);
       }
     }
     fetchUser();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
