@@ -8,8 +8,11 @@ const Footer = () => {
             <p>
                 Made by{" "}
                 <span className="underline">
-                    <Link href="" target="_blank">
-                        ---
+                    <Link
+                        href="https://www.linkedin.com/in/karla-itzel-zamora/"
+                        target="_blank"
+                    >
+                        Karla
                     </Link>
                 </span>
                 ,{" "}
@@ -23,14 +26,20 @@ const Footer = () => {
                 </span>
                 ,{" "}
                 <span className="underline">
-                    <Link href="" target="_blank">
-                        ---
+                    <Link
+                        href="https://www.linkedin.com/in/srahman02/"
+                        target="_blank"
+                    >
+                        Sohan
                     </Link>
                 </span>
                 ,{" "}
                 <span className="underline">
-                    <Link href="" target="_blank">
-                        ---
+                    <Link
+                        href="https://www.linkedin.com/in/cole-kralicek/"
+                        target="_blank"
+                    >
+                        Cole
                     </Link>
                 </span>
             </p>
