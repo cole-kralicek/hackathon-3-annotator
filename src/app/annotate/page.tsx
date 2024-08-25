@@ -120,6 +120,10 @@ export default function Home() {
     
   };
 
+  const handleSetComment = () => {
+    setLastComment({ range: selectedIndices, color: "blue", comment: textComment })
+  }
+
   const updateComments = () => {
 
     setAllComments(prev => {
@@ -234,7 +238,7 @@ export default function Home() {
               <Button
                 variant="outlined"
                 onClick={() => {
-                  setLastComment({ range: selectedIndices, color: "blue", comment: textComment })
+                  handleSetComment()
                   updateComments()
                   setTextComment('')
                   setOpenDialog(false)
