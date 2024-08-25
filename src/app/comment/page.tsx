@@ -80,7 +80,7 @@ const AnnotatePage = () => {
         comment: ''
     })
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [tag, setTag] = useState<{ tag: string, color: string }>({ tag: "Positive", color: "#07ad15" });
+    const [tag, setTag] = useState<{ tag: string, color: string }>({ tag: "Suggestion", color: "yellow" });
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -123,6 +123,11 @@ const AnnotatePage = () => {
 
     }, [fileHighlights, allComments, commentMap, lastComment, completeComments])
 
+    // For debugging current selected
+    useEffect(() => {
+        console.log("Current selected indices: ", selectedIndices);
+    }, [selectedIndices])
+
     const handleMouseDown = (index: number) => {
         setIsMouseDown(true);
         if (!selectedIndices.includes(index)) {
@@ -152,7 +157,7 @@ const AnnotatePage = () => {
             }
         })
         // Open dialog to save comment if the text isnt highlighted
-        const isHighlighted = selectedIndices.some((index) => fileHighlights.includes(index)); 
+        const isHighlighted = selectedIndices.some((index) => fileHighlights.includes(index));
         if (!isHighlighted) {
             setOpenDialog(true);
         }
@@ -192,14 +197,13 @@ const AnnotatePage = () => {
 
     const handleClickCommented = (index: number) => {
         // Find the corresponding comment based on the index
-        const correspondingComment = completeComments.find(dispComment =>
+        const correspondingComment = completeComments.find(dispComment => 
             dispComment.comment.range.includes(index)
         );
 
         if (correspondingComment) {
             // Scroll to the corresponding comment
             const commentIndex = completeComments.indexOf(correspondingComment);
-            console.log(commentIndex)
             const commentRef = commentRefs.current[commentIndex];
 
             if (commentRef) {
@@ -265,8 +269,8 @@ const AnnotatePage = () => {
                             >
                                 {isHighlighted ? (
                                     <a
-                                        
-                                        onClick={e => {                                            
+
+                                        onClick={e => {
                                             handleClickCommented(index);
                                         }}
                                         style={{ color: 'inherit', textDecoration: 'underline' }}
@@ -291,7 +295,9 @@ const AnnotatePage = () => {
                         {completeComments.map((comment, index) => (
                             <div
                                 key={index}
-                                ref={(el) => {commentRefs.current[index] = el}}
+                                ref={(el) => { 
+                                    commentRefs.current[index] = el
+                                 }}
                             >
                                 <Comment
                                     key={index}
@@ -304,19 +310,21 @@ const AnnotatePage = () => {
                                 />
                             </div>
                         ))}
-                            </div>
+                    </div>
                 </ScrollArea>
                 <Separator className="pt-auto" />
-                {!highlightedText && (
+                {openDialog && (
                     <div className="w-full flex flex-col justify-self-end items-center gap-2 p-4 border-[1px] border-primary rounded-sm">
                         <Label className="text-sm hidden">Add a comment</Label>
                         <Textarea
                             className="w-full"
                             placeholder="Add new comment here..."
+                            value={textComment}
+                            onChange={(e) => setTextComment(e.target.value)}
                         />
                         <Select>
                             <SelectTrigger>
-                                <SelectValue placeholder="Tag" />
+                                <SelectValue placeholder={tag.tag} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="Positive">Positive</SelectItem>
@@ -324,7 +332,15 @@ const AnnotatePage = () => {
                                 <SelectItem value="Fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button className="w-full">Add Comment</Button>
+                        <Button className="w-full"
+                            onClick={() => {
+                                handleSetComment()
+                                updateComments()
+                                setTextComment('')
+                                setSelectedIndices([])
+                                setOpenDialog(false)
+                            }}
+                        >Add Comment</Button>
                     </div>
                 )}
             </div>
@@ -353,26 +369,33 @@ const AnnotatePage = () => {
 
                 <ScrollArea className="h-[60%] w-full mb-2">
                     <div className="flex flex-col flex-1 gap-4">
-                        {comment.map((comment, index) => (
-                            <Comment
-                                key={index}
-                                username={comment.username}
-                                firstName={comment.firstName}
-                                lastName={comment.lastName}
-                                userImage={comment.userImage}
-                                comment={comment.comment}
-                                tag={comment.tag}
-                            />
+                        {completeComments.map((comment, index) => (
+                            <div
+                                // key={index}
+                                // ref={(el) => { commentRefs.current[index] = el }}
+                            >
+                                <Comment
+                                    key={index}
+                                    username={comment.username}
+                                    firstName={comment.firstName}
+                                    lastName={comment.lastName}
+                                    userImage={comment.userImage}
+                                    comment={comment.comment.comment}
+                                    tag={comment.tag}
+                                />
+                            </div>
                         ))}
-                    </div>
+                            </div>
                 </ScrollArea>
                 <Separator className="pt-auto" />
-                {!highlightedText && (
+                {openDialog && (
                     <div className="w-full flex flex-col justify-self-end items-center gap-2 p-4 border-[1px] border-primary rounded-sm bg-background">
                         <Label className="text-sm hidden">Add a comment</Label>
                         <Textarea
                             className="w-full"
                             placeholder="Add new comment here..."
+                            value={textComment}
+                            onChange={(e) => setTextComment(e.target.value)}
                         />
                         <Select>
                             <SelectTrigger>
@@ -384,11 +407,16 @@ const AnnotatePage = () => {
                                 <SelectItem value="fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button className="w-full">Add Comment</Button>
+                        <Button className="w-full" onClick={() => {
+                            handleSetComment()
+                            updateComments()
+                            setTextComment('')
+                            setOpenDialog(false)
+                        }}>Add Comment</Button>
                     </div>
                 )}
             </div>
-            <Modal
+            {/* <Modal
                 open={openDialog}
                 //onClose={}
                 aria-labelledby="modal-modal-title"
@@ -425,7 +453,7 @@ const AnnotatePage = () => {
                         </MUIButton>
                     </Stack>
                 </Box>
-            </Modal>
+            </Modal> */}
         </section>
     );
 };
