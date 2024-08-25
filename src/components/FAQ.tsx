@@ -28,10 +28,7 @@ const FAQ = () => {
     };
 
     return (
-        <section
-            ref={ref}
-            className="container flex flex-col items-center gap-6 py-20 sm:gap-7"
-        >
+        <section className="container flex flex-col items-center gap-6 py-20 sm:gap-7">
             <div className="flex flex-col gap-3">
                 <motion.span
                     initial={{ opacity: 0, y: 20 }}
@@ -60,6 +57,7 @@ const FAQ = () => {
                 to help.
             </motion.p>
             <motion.div
+                ref={ref}
                 variants={containerVariants}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}

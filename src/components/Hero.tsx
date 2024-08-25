@@ -48,9 +48,7 @@ const Hero = () => {
                 animate="visible"
             >
                 <motion.div variants={childVariants}>
-                    <Badge
-                        className="px-4 py-1 text-lg font-light gap-4 text-primary bg-primary-foreground border-primary rounded-full"
-                    >
+                    <Badge className="px-4 py-1 text-lg font-light gap-4 text-primary bg-primary-foreground border-primary rounded-full">
                         Introducing AnnotatorAI <ArrowRight />
                     </Badge>
                 </motion.div>
@@ -95,7 +93,9 @@ const Hero = () => {
                     /> */}
                 </motion.div>
             </motion.section>
-            <Features />
+            <motion.div variants={variants} initial="hidden" animate="visible">
+                <Features />
+            </motion.div>
         </>
     );
 };

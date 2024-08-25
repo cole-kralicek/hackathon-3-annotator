@@ -31,10 +31,7 @@ const Testimonials = () => {
     };
 
     return (
-        <section
-            ref={ref}
-            className="container flex flex-col items-center gap-6 py-20 sm:gap-7"
-        >
+        <section className="container flex flex-col items-center gap-6 py-20 sm:gap-7">
             <div className="flex flex-col gap-3">
                 <span className="font-bold uppercase text-primary text-center">
                     Testimonials
@@ -43,7 +40,10 @@ const Testimonials = () => {
                     What our users say
                 </h2>
             </div>
-            <p className="text-center text-lg max-w-2xl text-muted-foreground">
+            <p
+                ref={ref}
+                className="text-center text-lg max-w-2xl text-muted-foreground"
+            >
                 Our users love CardGenAI. Here&apos;s what they have to say
                 about us.
             </p>

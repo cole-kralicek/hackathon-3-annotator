@@ -25,7 +25,6 @@ const CTA = () => {
 
     return (
         <motion.section
-            ref={ref}
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -45,7 +44,7 @@ const CTA = () => {
                 our AI coaches and get personalized workout plans and nutrition
                 advice.
             </motion.p>
-            <motion.div variants={itemVariants}>
+            <motion.div ref={ref} variants={itemVariants}>
                 <Button size="lg" className="py-4 px-8 text-base border-border">
                     <Link href="/sign-up">Get Started</Link>
                 </Button>
