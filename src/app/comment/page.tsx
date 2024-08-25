@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
 import './page.css'
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Comment from "@/components/Comment";
@@ -66,6 +66,8 @@ const AnnotatePage = () => {
     const [commentMap, setCommentMap] = useState<Map<number, number>>(new Map());
     // Comment array to be displayed
     const [completeComments, setCompleteComments] = useState<Array<DisplayedComment>>([]);
+    // Ref for new comments (used for scrollable functionality)
+    const commentRefs = useRef<(HTMLDivElement | null)[]>([]);
     // Highlight mode selection (aka words or partial)
     const [highlightFullWords, setHighlightFullWords] = useState<boolean>(true);
     // Open comment dialog box
@@ -78,6 +80,7 @@ const AnnotatePage = () => {
         comment: ''
     })
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [tag, setTag] = useState<{ tag: string, color: string }>({ tag: "Positive", color: "#07ad15" });
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -148,8 +151,11 @@ const AnnotatePage = () => {
                 })
             }
         })
-        // Open dialog to save comment
-        setOpenDialog(true);
+        // Open dialog to save comment if the text isnt highlighted
+        const isHighlighted = selectedIndices.some((index) => fileHighlights.includes(index)); 
+        if (!isHighlighted) {
+            setOpenDialog(true);
+        }
 
     };
 
@@ -163,7 +169,7 @@ const AnnotatePage = () => {
             lastName: "last",
             userImage: "https://github.com/shadcn.png",
             comment: newComment,
-            tag: "tag",
+            tag: tag.tag,
         };
         const newArray = [...completeComments, comment];
         setCompleteComments(newArray)
@@ -183,6 +189,24 @@ const AnnotatePage = () => {
         })
         console.log("Last selected word indices:", selectedIndices);
     }
+
+    const handleClickCommented = (index: number) => {
+        // Find the corresponding comment based on the index
+        const correspondingComment = completeComments.find(dispComment =>
+            dispComment.comment.range.includes(index)
+        );
+
+        if (correspondingComment) {
+            // Scroll to the corresponding comment
+            const commentIndex = completeComments.indexOf(correspondingComment);
+            console.log(commentIndex)
+            const commentRef = commentRefs.current[commentIndex];
+
+            if (commentRef) {
+                commentRef.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    };
 
     const comment = [
         {
@@ -205,7 +229,7 @@ const AnnotatePage = () => {
                 <input
                     type="file"
                     id="file-upload"
-                    //style={{ display: 'none' }} // Hide the input
+                    //style={{ display: 'none' }} // Hide the input if we make a cooler button
                     onChange={e => {
                         const file = e.target.value;
                         setFileName(file.slice(file.lastIndexOf("\\") + 1));
@@ -223,19 +247,38 @@ const AnnotatePage = () => {
                         width: '100%',
                         margin: 0
                     }}>
-                    {textArray.map((word, index) => (
-                        <span key={index}
-                            onMouseDown={() => handleMouseDown(index)}
-                            onMouseEnter={() => handleMouseEnter(index)}
-                            onMouseUp={handleMouseUp}
-                            style={{
-                                backgroundColor: selectedIndices.includes(index) || fileHighlights.includes(index) ? 'yellow' : 'transparent',
-                                cursor: 'pointer',
-                                padding: '0 2px',
-                            }}>
-                            {word.includes("\n") ? word : word + " "}
-                        </span>
-                    ))}
+                    {textArray.map((word, index) => {
+                        const isHighlighted = selectedIndices.includes(index) || fileHighlights.includes(index);
+
+                        return (
+                            <span
+                                key={index}
+                                onMouseDown={() => handleMouseDown(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}
+                                onMouseUp={handleMouseUp}
+                                style={{
+                                    backgroundColor: isHighlighted ? tag.color : 'transparent',
+                                    cursor: 'pointer',
+                                    padding: '0 2px',
+                                }}
+                                onClick={isHighlighted ? () => handleClickCommented(index) : undefined}
+                            >
+                                {isHighlighted ? (
+                                    <a
+                                        
+                                        onClick={e => {                                            
+                                            handleClickCommented(index);
+                                        }}
+                                        style={{ color: 'inherit', textDecoration: 'underline' }}
+                                    >
+                                        {word.includes("\n") ? word : word + " "}
+                                    </a>
+                                ) : (
+                                    word.includes("\n") ? word : word + " "
+                                )}
+                            </span>
+                        );
+                    })}
                 </ScrollArea>
             </div>
             <div className="hidden md:flex flex-col h-[75vh] items-center gap-4 w-full md:w-1/2 lg:w-1/4">
@@ -245,18 +288,23 @@ const AnnotatePage = () => {
 
                 <ScrollArea className="h-[100%] w-full">
                     <div className="flex flex-col flex-1 gap-4">
-                        {completeComments.length > 0 ? completeComments.map((comment, index) => (
-                            <Comment
+                        {completeComments.map((comment, index) => (
+                            <div
                                 key={index}
-                                username={comment.username}
-                                firstName={comment.firstName}
-                                lastName={comment.lastName}
-                                userImage={comment.userImage}
-                                comment={comment.comment.comment}
-                                tag={comment.tag}
-                            />
-                        )) : <></>}
-                    </div>
+                                ref={(el) => {commentRefs.current[index] = el}}
+                            >
+                                <Comment
+                                    key={index}
+                                    username={comment.username}
+                                    firstName={comment.firstName}
+                                    lastName={comment.lastName}
+                                    userImage={comment.userImage}
+                                    comment={comment.comment.comment}
+                                    tag={comment.tag}
+                                />
+                            </div>
+                        ))}
+                            </div>
                 </ScrollArea>
                 <Separator className="pt-auto" />
                 {!highlightedText && (
@@ -271,9 +319,9 @@ const AnnotatePage = () => {
                                 <SelectValue placeholder="Tag" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="improve">Improve</SelectItem>
-                                <SelectItem value="change">Change</SelectItem>
-                                <SelectItem value="fix">Fix</SelectItem>
+                                <SelectItem value="Positive">Positive</SelectItem>
+                                <SelectItem value="Suggestion">Suggestion</SelectItem>
+                                <SelectItem value="Fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button className="w-full">Add Comment</Button>
@@ -369,6 +417,11 @@ const AnnotatePage = () => {
                             }}
                         >
                             Add
+                        </MUIButton>
+                        <MUIButton 
+                            variant="outlined"
+                            onClick={() => {setOpenDialog(false)}}>
+                            Cancel
                         </MUIButton>
                     </Stack>
                 </Box>
