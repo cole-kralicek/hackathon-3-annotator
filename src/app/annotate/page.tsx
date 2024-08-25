@@ -46,6 +46,7 @@ const AnnotatePage = () => {
         lastName: string,
         userImage: string,
         comment: Comment,
+        files: File[],
         tag: string,
     }
 
@@ -104,7 +105,8 @@ const AnnotatePage = () => {
                 const result = e.target?.result;
                 if (typeof result === 'string') {
                     // Here I assume the line break is formatted like this for now
-                    const replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
+                    let replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
+                    replacement = replacement.replaceAll("'", "&apos;")
                     const wordsList = replacement.split(' ');
                     setTextArray(wordsList);
                     console.log(wordsList);
@@ -128,8 +130,9 @@ const AnnotatePage = () => {
         console.log("Comment map: ", commentMap)
         console.log("Last comment: ", lastComment)
         console.log("complete comments: ", completeComments)
+        console.log("comment files:", files)
 
-    }, [fileHighlights, allComments, commentMap, lastComment, completeComments])
+    }, [fileHighlights, allComments, commentMap, lastComment, completeComments, files])
 
     // For debugging current selected
     useEffect(() => {
@@ -175,6 +178,7 @@ const AnnotatePage = () => {
     const handleSetComment = () => {
         const newComment = { range: selectedIndices, color: tag.color, comment: textComment };
         setLastComment(newComment);
+        const filesCopy = files;
 
         const comment: DisplayedComment = {
             username: "me",
@@ -182,10 +186,11 @@ const AnnotatePage = () => {
             lastName: "last",
             userImage: "https://github.com/shadcn.png",
             comment: newComment,
+            files: filesCopy,
             tag: tag.tag,
         };
         const newArray = [...completeComments, comment];
-        setCompleteComments(newArray)
+        setCompleteComments(newArray);        
     }
 
     const updateComments = () => {
@@ -200,7 +205,8 @@ const AnnotatePage = () => {
             });
             return updatedComments;
         })
-        console.log("Last selected word indices:", selectedIndices);
+        console.log("Last selected word indices:", selectedIndices);     
+        setFiles([])   
     }
 
     // Comment file functions
@@ -233,17 +239,6 @@ const AnnotatePage = () => {
             }
         }
     };
-
-    const comment = [
-        {
-            username: "JohnDoe",
-            firstName: "John",
-            lastName: "Doe",
-            userImage: "https://github.com/shadcn.png",
-            comment: "This is a comment",
-            tag: "Change",
-        },
-    ];
 
     // bg-[var(--card)] text-foreground
 
@@ -334,6 +329,7 @@ const AnnotatePage = () => {
                                     lastName={comment.lastName}
                                     userImage={comment.userImage}
                                     comment={comment.comment.comment}
+                                    files={comment.files}
                                     tag={comment.tag}
                                 />
                             </div>
@@ -378,16 +374,16 @@ const AnnotatePage = () => {
                                                         ) ? (
                                                             <Image size={18} />
                                                         ) : file.type.includes(
-                                                              "video"
-                                                          ) ? (
+                                                            "video"
+                                                        ) ? (
                                                             <Video size={18} />
                                                         ) : file.type.includes(
-                                                              "pdf"
-                                                          ) ? (
+                                                            "pdf"
+                                                        ) ? (
                                                             <File size={18} />
                                                         ) : file.type.includes(
-                                                              "audio"
-                                                          ) ? (
+                                                            "audio"
+                                                        ) ? (
                                                             <FileAudio
                                                                 size={18}
                                                             />
@@ -470,7 +466,7 @@ const AnnotatePage = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <Button className="w-full"
                             onClick={() => {
                                 handleSetComment()
@@ -478,6 +474,7 @@ const AnnotatePage = () => {
                                 setTextComment('')
                                 setSelectedIndices([])
                                 setOpenDialog(false)
+
                             }}
                         >Add Comment</Button>
                     </div>
@@ -520,6 +517,7 @@ const AnnotatePage = () => {
                                     lastName={comment.lastName}
                                     userImage={comment.userImage}
                                     comment={comment.comment.comment}
+                                    files={files}
                                     tag={comment.tag}
                                 />
                             </div>
@@ -563,16 +561,16 @@ const AnnotatePage = () => {
                                                         ) ? (
                                                             <Image size={18} />
                                                         ) : file.type.includes(
-                                                              "video"
-                                                          ) ? (
+                                                            "video"
+                                                        ) ? (
                                                             <Video size={18} />
                                                         ) : file.type.includes(
-                                                              "pdf"
-                                                          ) ? (
+                                                            "pdf"
+                                                        ) ? (
                                                             <File size={18} />
                                                         ) : file.type.includes(
-                                                              "audio"
-                                                          ) ? (
+                                                            "audio"
+                                                        ) ? (
                                                             <FileAudio
                                                                 size={18}
                                                             />
@@ -661,6 +659,7 @@ const AnnotatePage = () => {
                             updateComments()
                             setTextComment('')
                             setOpenDialog(false)
+                            //setFiles([]);
                         }}>Add Comment</Button>
                     </div>
                 )}
