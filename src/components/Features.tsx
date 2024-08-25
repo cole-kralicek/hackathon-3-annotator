@@ -40,13 +40,12 @@ const Features = () => {
                     Features
                 </span>
                 <h2 className="text-3xl font-heading font-semibold text-center sm:text-4xl">
-                    Personalized for your Study Needs
+                    Personalized for your Sales Needs
                 </h2>
             </div>
             <p className="text-center text-lg max-w-2xl text-muted-foreground">
-                Our features are designed to help you study smarter, not harder.
-                We have everything you need to get started with your flashcards
-                journey.
+                Our features are designed to help you work smarter, not harder.
+                We have everything you need to get started with your transcripts.
             </p>
             <div className="grid grid-cols-1 gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
                 <motion.div variants={cardVariants}>
@@ -61,11 +60,11 @@ const Features = () => {
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                                    AI-Flashcards
+                                    AI-Summaries
                                 </h3>
                                 <p className="text-muted-foreground">
-                                    Create flashcards with ease with the help of
-                                    AI or with file uploads.
+                                    Get AI-generated summaries of your transcripts
+                                    in seconds.
                                 </p>
                             </div>
                         </CardContent>
@@ -83,11 +82,11 @@ const Features = () => {
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                                    Public Library
+                                    Smart Comments
                                 </h3>
                                 <p className="text-muted-foreground">
-                                    Access thousands of flashcards created by
-                                    others.
+                                    Add comments with text, files, and tags to
+                                    make improvements.
                                 </p>
                             </div>
                         </CardContent>
@@ -105,11 +104,11 @@ const Features = () => {
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                                    Share Knowledge
+                                    Intuitive Design
                                 </h3>
                                 <p className="text-muted-foreground">
-                                    Share your flashcards with your friends and
-                                    classmates.
+                                    Our user-friendly design makes it easy to
+                                    create transcripts.
                                 </p>
                             </div>
                         </CardContent>

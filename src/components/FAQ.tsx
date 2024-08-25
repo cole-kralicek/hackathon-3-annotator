@@ -71,42 +71,37 @@ const FAQ = () => {
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
                                 Getting started is easy! Simply create an
-                                account and you&apos;re good to go. Upgrade your
-                                account to create unlimited flashcard decks.
+                                account and you&apos;re good to go. 
                             </AccordionContent>
                         </AccordionItem>
 
                         <AccordionItem value="item-2" className="border-b-0">
                             <AccordionTrigger className="py-6 text-left text-lg hover:no-underline">
-                                How do I create flashcards?
+                                How do I create transcripts?
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
-                                You can create flashcards by clicking on the
-                                &lsquo;Create Flashcards&rsquo; button. Choose
-                                to create a new deck manually, with a file
-                                upload, or using AI genetation.
+                                You can create transcripts by going to the Annotation
+                                page and uploading your text file.
                             </AccordionContent>
                         </AccordionItem>
 
                         <AccordionItem value="item-3" className="border-b-0">
                             <AccordionTrigger className="py-6 text-left text-lg hover:no-underline">
-                                How do I access the public library?
+                                What can I add in my comments?
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
-                                You can access the public library by clicking on
-                                the &lsquo;Home&rsquo; button once you are
-                                logged in.
+                                You can add anything you like in your comments.
+                                You can add text, files, tags, and more.
                             </AccordionContent>
                         </AccordionItem>
 
                         <AccordionItem value="item-4" className="border-b-0">
                             <AccordionTrigger className="py-6 text-left text-lg hover:no-underline">
-                                Can I edit my flashcards that I get from AI?
+                                How is AI used in AnnotatorAI?
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
-                                Yes, you can edit the flashcards that you get
-                                from AI. You can add, remove, or modify any
-                                content on the flashcards.
+                                AI is used to help create summaries using the 
+                                text you provide to help you save time.
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

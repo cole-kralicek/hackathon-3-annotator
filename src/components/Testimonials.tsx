@@ -9,8 +9,8 @@ const Testimonials = () => {
 
     // Generate random initial positions for each card
     const getRandomPosition = () => ({
-        x: Math.random() * 100 - 50, 
-        y: Math.random() * 100 - 50, 
+        x: Math.random() * 100 - 50,
+        y: Math.random() * 100 - 50,
         opacity: 0,
     });
 
@@ -44,17 +44,17 @@ const Testimonials = () => {
                 ref={ref}
                 className="text-center text-lg max-w-2xl text-muted-foreground"
             >
-                Our users love CardGenAI. Here&apos;s what they have to say
+                Our users love AnnotatorAI. Here&apos;s what they have to say
                 about us.
             </p>
             <div className="mt-1 columns-1 gap-5 md:columns-2 lg:columns-3">
                 {[
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams.",
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams.",
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams. I love the feature with the AI.",
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams. I have been using it for a while now and it has helped me a lot.",
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams.",
-                    "I love CardGenAI! It's so easy to use and has helped me ace my exams.",
+                    "I love AnnotatorAI! They make it easy to create transcripts and summaries.",
+                    "AnnotatorAI has helped me a lot with perfecting my transcripts. I love it!",
+                    "The best tool for creating transcripts and summaries. I highly recommend it.",
+                    "AnnotatorAI is a game-changer. I can't imagine my life without it.",
+                    "I highly recommend AnnotatorAI. It's the best tool for creating transcripts.",
+                    "I have improved my sales productivity by using AnnotatorAI. It's amazing!",
                 ].map((testimonial, index) => (
                     <motion.div
                         key={index}
@@ -69,15 +69,40 @@ const Testimonials = () => {
                                 <p className="text-foreground">{testimonial}</p>
                                 <div className="flex items-center gap-4 w-full pt-4">
                                     <Avatar>
-                                        <AvatarImage src="https://github.com/shadcn.png" />
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarImage src="" />
+                                        <AvatarFallback>
+                                            {
+                                                ["DF", "GD", "SF", "UR", "SF"][
+                                                    Math.floor(
+                                                        Math.random() * 5
+                                                    )
+                                                ]
+                                            }
+                                        </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col">
                                         <p className="font-semibold leading-none text-foreground">
-                                            Shad
+                                            {
+                                                [
+                                                    "David",
+                                                    "John",
+                                                    "Sarah",
+                                                    "Jane",
+                                                    "Sam",
+                                                    "Alice",
+                                                ][Math.floor(Math.random() * 6)]
+                                            }
                                         </p>
                                         <p className="text-muted-foreground">
-                                            Student
+                                            {
+                                                [
+                                                    "CEO",
+                                                    "CTO",
+                                                    "COO",
+                                                    "CFO",
+                                                    "CMO",
+                                                ][Math.floor(Math.random() * 5)]
+                                            }
                                         </p>
                                     </div>
                                 </div>

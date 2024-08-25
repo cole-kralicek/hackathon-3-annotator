@@ -62,8 +62,8 @@ const Hero = () => {
                     variants={childVariants}
                     className="text-center text-lg max-w-lg text-muted-foreground sm:text-xl"
                 >
-                    Create Flashcards with ease and let the AI do the rest.
-                    Study smarter, not harder.
+                    Create transcripts, summaries, and personalized comments for
+                    your future reference.
                 </motion.p>
                 <motion.div
                     variants={childVariants}
