@@ -22,7 +22,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <ClerkProvider>
-                <body className={inter.className}>
+                <body className={`dark ${inter.className}`}>
                     <Nav />
                     {children}
                     <Footer />

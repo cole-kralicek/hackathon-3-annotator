@@ -86,7 +86,7 @@ const HeroColumns = () => {
                             Learn More
                         </Button>
                         <Button size="lg">
-                            <Link href="/login">Get Started</Link>
+                            <Link href="/sign-up">Get Started</Link>
                         </Button>
                     </motion.div>
                 </motion.div>
