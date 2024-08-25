@@ -7,6 +7,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import LandingPage from "@/components/LandingPage";
 import Dashboard from "@/components/Dashboard";
 import getUser from "@/lib/getUser";
+import Annotator from "@/components/Annotator";
 
 export default function Home() {
     // const user = await currentUser();
@@ -14,8 +15,6 @@ export default function Home() {
 
     // const { userId } = auth();
     // console.log(userId);
-
-
 
     useEffect(() => {
         async function fetchTables() {
@@ -131,7 +130,12 @@ export default function Home() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ user_id, transcriptId, s3_url, summary }),
+                    body: JSON.stringify({
+                        user_id,
+                        transcriptId,
+                        s3_url,
+                        summary,
+                    }),
                 });
 
                 if (!response.ok) {
@@ -145,7 +149,6 @@ export default function Home() {
             }
         }
 
-
         // fetchTables();
         // fetchTranscripts();
         // fetchTranscript("1");
@@ -153,15 +156,10 @@ export default function Home() {
         // updateTranscript();
     }, []);
 
-
-  
-
     return (
         <>
             <SignedIn>
-                {/* <Dashboard /> */}
-                <AnnotatePage />
-                <LLMSummary />
+                <Dashboard />
             </SignedIn>
             <SignedOut>
                 <LandingPage />
