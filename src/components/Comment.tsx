@@ -18,6 +18,7 @@ interface CommentProps {
     userImage: string;
     comment: string;
     tag: string;
+    // files: string[];
 }
 
 const Comment = ({
@@ -27,6 +28,7 @@ const Comment = ({
     userImage,
     comment,
     tag,
+    // files,
 }: CommentProps) => {
     return (
         <Card className="relative w-full">

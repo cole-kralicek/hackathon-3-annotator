@@ -158,6 +158,16 @@ const AnnotatePage = () => {
         }
     };
 
+    useEffect(() => {
+        console.log(files);
+        for (const file of files) {
+            // Print file size in kb
+            console.log(file.size / 1024);
+            // Print file size in mb
+            console.log(file.size / 1024 / 1024);
+        }
+    }, [files]);
+
     const handleRemoveFile = (index: number) => {
         setFiles(files.filter((_, i) => i !== index));
     };
