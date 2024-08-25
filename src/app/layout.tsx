@@ -6,6 +6,8 @@ import {
   UserButton
 } from '@clerk/nextjs'
 
+import Header from '@/components/Header'
+
 import { LTRemarkRegular } from '../../styles/fonts'
 
 export default function RootLayout({
@@ -23,6 +25,7 @@ export default function RootLayout({
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <Header/>
           {children}
         </body>
       </html>
