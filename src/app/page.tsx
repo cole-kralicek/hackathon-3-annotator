@@ -63,8 +63,8 @@ export default function Home() {
     return (
         <>
             <SignedIn>
-                <AnnotatePage />
-                <LLMSummary />
+                {/* <AnnotatePage />
+                <LLMSummary /> */}
             </SignedIn>
             <SignedOut>
                 <LandingPage />
