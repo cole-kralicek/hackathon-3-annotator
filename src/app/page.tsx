@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Container, Button, TextField, Box, Typography } from "@mui/material";
+import AnnotatePage from "@/components/AnnotatePage";
+import LLMSummary from "@/components/LLMSummary";
 // import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default function Home() {
@@ -56,5 +58,8 @@ export default function Home() {
         }
     };
 
-    return <></>;
+    return <>
+        <AnnotatePage />
+        <LLMSummary />
+    </>;
 }

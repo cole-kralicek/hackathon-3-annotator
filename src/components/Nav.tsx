@@ -13,7 +13,7 @@ const Nav = () => {
     });
 
     return (
-        <header className="flex flex-row w-full items-center justify-between px-4 sm:px-12 py-4 shadow-md">
+        <header className="flex flex-row w-full items-center justify-between px-4 sm:px-20 py-4 border-b-[0.5px] border-foreground">
             <Link href="/" className="flex flex-row gap-2 items-center">
                 <MessageSquareDiff
                     size={24}
@@ -29,16 +29,22 @@ const Nav = () => {
                     </Button>
                 </SignedOut>
                 <SignedIn>
+                    <Link href="/create">
+                        <Button size="sm">Create Transcript</Button>
+                    </Link>
                     <UserButton />
                 </SignedIn>
             </nav>
-            <div className="flex items-center sm:hidden">
+            <div className="flex items-center px-4 sm:hidden">
                 <SignedOut>
                     <Button className="text-md">
                         <SignInButton />
                     </Button>
                 </SignedOut>
                 <SignedIn>
+                    <Link href="/create" className="mr-4">
+                        <Button size="sm">Create</Button>
+                    </Link>
                     <UserButton />
                 </SignedIn>
             </div>
