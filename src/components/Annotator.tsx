@@ -287,10 +287,8 @@ const Annotator = () => {
                         Upload File
                     </Button>
                 )}
-                {textArray.length > 0 && ( 
-                    <Badge className="text-lg px-4">
-                        {fileName}
-                    </Badge>
+                {textArray.length > 0 && (
+                    <Badge className="text-lg px-4">{fileName}</Badge>
                 )}
                 <ScrollArea className="h-[70vh] w-full text-sm mt-4 pl-4 pr-6 pb-4">
                     {textArray.map((word, index) => {
@@ -398,14 +396,27 @@ const Annotator = () => {
                             value={textComment}
                             onChange={(e) => setTextComment(e.target.value)}
                         />
-                        <Select>
+                        <Select
+                            onValueChange={(value) =>
+                                setTag({
+                                    tag: value,
+                                    color: colorMap[
+                                        value as keyof typeof colorMap
+                                    ],
+                                })
+                            }
+                        >
                             <SelectTrigger>
-                                <SelectValue placeholder="Tag" />
+                                <SelectValue placeholder={tag.tag} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="improve">Improve</SelectItem>
-                                <SelectItem value="change">Change</SelectItem>
-                                <SelectItem value="fix">Fix</SelectItem>
+                                <SelectItem value="Positive">
+                                    Positive
+                                </SelectItem>
+                                <SelectItem value="Suggestion">
+                                    Suggestion
+                                </SelectItem>
+                                <SelectItem value="Fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
 
@@ -591,18 +602,27 @@ const Annotator = () => {
                                 value={textComment}
                                 onChange={(e) => setTextComment(e.target.value)}
                             />
-                            <Select>
+                            <Select
+                                onValueChange={(value) =>
+                                    setTag({
+                                        tag: value,
+                                        color: colorMap[
+                                            value as keyof typeof colorMap
+                                        ],
+                                    })
+                                }
+                            >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Tag" />
+                                    <SelectValue placeholder={tag.tag} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="improve">
-                                        Improve
+                                    <SelectItem value="Positive">
+                                        Positive
                                     </SelectItem>
-                                    <SelectItem value="change">
-                                        Change
+                                    <SelectItem value="Suggestion">
+                                        Suggestion
                                     </SelectItem>
-                                    <SelectItem value="fix">Fix</SelectItem>
+                                    <SelectItem value="Fix">Fix</SelectItem>
                                 </SelectContent>
                             </Select>
                             <div className="w-full flex flex-row gap-2 justify-between items-center h-auto">
