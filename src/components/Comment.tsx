@@ -10,6 +10,7 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { Edit, DeleteIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CommentProps {
     username: string;
@@ -45,8 +46,8 @@ const Comment = ({
                 <Badge className="mr-auto">{tag}</Badge>
                 <p className="text-sm text-muted-foreground">{comment}</p>
                 <div className="absolute top-2 right-4 flex flex-row self-end gap-2">
-                    <Edit className="cursor-pointer" />
-                    <DeleteIcon className="cursor-pointer" />
+                    <Edit onClick={() => console.log("edit test")} className="cursor-pointer" />
+                    <DeleteIcon onClick={() => console.log("delete test")} className="cursor-pointer" />
                 </div>
             </CardContent>
         </Card>
