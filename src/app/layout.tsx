@@ -1,34 +1,33 @@
 import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
 
-import Header from '@/components/Header'
+import { LTRemarkRegular } from "../../styles/fonts";
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
 
-import { LTRemarkRegular } from '../../styles/fonts'
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import "@/app/globals.css";
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={LTRemarkRegular.className}>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          <Header/>
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
-  )
+    return (
+        <html lang="en">
+            <ClerkProvider>
+                <body className={`dark ${inter.className}`}>
+                    <Nav />
+                    {children}
+                    <Footer />
+                </body>
+            </ClerkProvider>
+        </html>
+    );
 }
