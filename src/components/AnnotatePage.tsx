@@ -245,7 +245,7 @@ const AnnotatePage = () => {
             </Button>
 
             {/* Sidebar Overlay for Smaller Screens */}
-            <div
+            {isSidebarOpen && (<div
                 className={`absolute top-6 right-0 h-full w-[80%] bg-background p-4 shadow-lg z-40 ${
                     isSidebarOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
@@ -290,7 +290,7 @@ const AnnotatePage = () => {
                         <Button className="w-full">Add Comment</Button>
                     </div>
                 )}
-            </div>
+            </div>)}
         </section>
     );
 };

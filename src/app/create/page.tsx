@@ -9,8 +9,8 @@ const UploadPage = () => {
     const [selected, setSelected] = useState("manual");
 
     const tabs = [
-        { id: "manual", label: "Manual Entry" },
-        { id: "aigen", label: "AI Generated" },
+        // { id: "manual", label: "Manual Entry" },
+        // { id: "aigen", label: "AI Generated" },
         { id: "upload", label: "Upload File" },
     ];
 
