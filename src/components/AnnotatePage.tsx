@@ -6,6 +6,7 @@ import Comment from "@/components/Comment";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import {
     Select,
     SelectContent,
@@ -57,6 +58,8 @@ const AnnotatePage = () => {
         "Fix": "#f73131"
     }
 
+    //LLM
+    const [output, setOutput] = useState<string>('');
     // Text to be displayed in center box
     const [textArray, setTextArray] = useState<string[]>([]);
     // Name of file displayed
@@ -103,6 +106,9 @@ const AnnotatePage = () => {
             const reader = new FileReader();
             reader.onload = (e: ProgressEvent<FileReader>) => {
                 const result = e.target?.result;
+                if (result) {
+                    generateText(result)
+                }
                 if (typeof result === 'string') {
                     // Here I assume the line break is formatted like this for now
                     let replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
@@ -115,6 +121,28 @@ const AnnotatePage = () => {
             reader.readAsText(file);
         }
     };
+
+    const generateText = async (prompt: string | ArrayBuffer) => {
+        try {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ body: prompt })
+            })
+
+            const data = await response.json()
+            if (response.ok) {
+                setOutput(data.output)
+            } else {
+                setOutput(data.error)
+            }
+
+        } catch (error) {
+            console.log("Post request error: %s", error)
+        }
+    }
 
     // Update highlighted "words" for each new index selected
     useEffect(() => {
@@ -243,6 +271,7 @@ const AnnotatePage = () => {
     // bg-[var(--card)] text-foreground
 
     return (
+        <>
         <section className="container relative flex flex-col md:flex-row items-start gap-8 pt-8 px-8 md:px-12 lg:px-20 sm:gap-10 min-h-[calc(100vh-200px)]">
             <div className="flex flex-col items-center gap-4 w-full rounded-md p-4 bg-foreground text-background md:w-1/2 lg:w-3/4">
 
@@ -664,6 +693,19 @@ const AnnotatePage = () => {
                 )}
             </div>
         </section>
+        <section className="container relative flex flex-col items-center px-8 mt-12 mb-20 md:px-12 lg:px-20">
+        <Card className="flex flex-col gap-2 w-full">
+            <CardHeader className="px-12">
+                <CardTitle className="text-2xl font-semibold">
+                    Summary
+                </CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">
+                    {output}
+                </CardDescription>
+            </CardHeader>
+        </Card>
+    </section>
+    </>
     );
 };
 

@@ -161,7 +161,7 @@ export default function Home() {
             <SignedIn>
                 {/* <Dashboard /> */}
                 <AnnotatePage />
-                <LLMSummary />
+                {/* <LLMSummary /> */}
             </SignedIn>
             <SignedOut>
                 <LandingPage />
