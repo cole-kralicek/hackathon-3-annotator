@@ -54,7 +54,7 @@ const Comment = ({
                 <p className="text-sm text-muted-foreground">{comment}</p>
                 <div className="w-full flex flex-row gap-2 justify-between items-center h-auto">
                     <div className="flex flex-row gap-1 w-3/4">
-                         {files.length > 0 &&
+                         {files &&
                             files.map((file, index) => (
                                 <div
                                     key={index}
@@ -120,7 +120,7 @@ const Comment = ({
                                 </div>
                             ))}
 
-                        {files.length === 0 && (
+                        {files && files.length === 0 && (
                             <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px]">
                                 <span className="text-sm text-muted-foreground">
                                     No files
@@ -129,7 +129,7 @@ const Comment = ({
                         )} 
                     </div> 
                     <p className="text-sm text-muted-foreground">
-                        {files.length}/3
+                        {files?.length}/3
                     </p>
 
                 </div>
