@@ -40,9 +40,8 @@ const CTA = () => {
                 variants={itemVariants}
                 className="text-center text-lg max-w-xl text-muted-foreground"
             >
-                Sign up today and start your fitness journey for free! Chat with
-                our AI coaches and get personalized workout plans and nutrition
-                advice.
+                Sign up today and start personalizing transcripts for free. 
+                Start your journey with AnnotatorAI today!
             </motion.p>
             <motion.div ref={ref} variants={itemVariants}>
                 <Button size="lg" className="py-4 px-8 text-base border-border">
