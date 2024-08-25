@@ -18,20 +18,6 @@ import { MessageCircleMore, X } from "lucide-react";
 import { Box, Modal, Stack, TextField, Typography } from "@mui/material";
 import { Button as MUIButton } from "@mui/material"
 
-const muiModalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'white',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 3,
-}
 
 const AnnotatePage = () => {
     // Comment data type
@@ -48,6 +34,13 @@ const AnnotatePage = () => {
         userImage: string,
         comment: Comment,
         tag: string,
+    }
+
+    // Highlight color map based on current tag
+    const colorMap = {
+        "Positive": "#44c950",
+        "Suggestion": "yellow",
+        "Fix": "#f73131"
     }
 
     // Text to be displayed in center box
@@ -165,7 +158,7 @@ const AnnotatePage = () => {
     };
 
     const handleSetComment = () => {
-        const newComment = { range: selectedIndices, color: "blue", comment: textComment };
+        const newComment = { range: selectedIndices, color: tag.color, comment: textComment };
         setLastComment(newComment);
 
         const comment: DisplayedComment = {
@@ -197,7 +190,7 @@ const AnnotatePage = () => {
 
     const handleClickCommented = (index: number) => {
         // Find the corresponding comment based on the index
-        const correspondingComment = completeComments.find(dispComment => 
+        const correspondingComment = completeComments.find(dispComment =>
             dispComment.comment.range.includes(index)
         );
 
@@ -253,6 +246,12 @@ const AnnotatePage = () => {
                     }}>
                     {textArray.map((word, index) => {
                         const isHighlighted = selectedIndices.includes(index) || fileHighlights.includes(index);
+                        // Find the comment associated with the current index
+                        const comment = completeComments.find(dispComment =>
+                            dispComment.comment.range.includes(index)
+                        );
+                        // Either current tag color or saved comment color
+                        const highlightColor = comment ? comment.comment.color : tag.color;
 
                         return (
                             <span
@@ -261,7 +260,7 @@ const AnnotatePage = () => {
                                 onMouseEnter={() => handleMouseEnter(index)}
                                 onMouseUp={handleMouseUp}
                                 style={{
-                                    backgroundColor: isHighlighted ? tag.color : 'transparent',
+                                    backgroundColor: isHighlighted ? highlightColor : 'transparent',
                                     cursor: 'pointer',
                                     padding: '0 2px',
                                 }}
@@ -295,9 +294,9 @@ const AnnotatePage = () => {
                         {completeComments.map((comment, index) => (
                             <div
                                 key={index}
-                                ref={(el) => { 
+                                ref={(el) => {
                                     commentRefs.current[index] = el
-                                 }}
+                                }}
                             >
                                 <Comment
                                     key={index}
@@ -322,7 +321,8 @@ const AnnotatePage = () => {
                             value={textComment}
                             onChange={(e) => setTextComment(e.target.value)}
                         />
-                        <Select>
+                        <Select
+                            onValueChange={(value) => setTag({ tag: value, color: colorMap[value as keyof typeof colorMap] })}>
                             <SelectTrigger>
                                 <SelectValue placeholder={tag.tag} />
                             </SelectTrigger>
@@ -371,8 +371,8 @@ const AnnotatePage = () => {
                     <div className="flex flex-col flex-1 gap-4">
                         {completeComments.map((comment, index) => (
                             <div
-                                // key={index}
-                                // ref={(el) => { commentRefs.current[index] = el }}
+                            // key={index}
+                            // ref={(el) => { commentRefs.current[index] = el }}
                             >
                                 <Comment
                                     key={index}
@@ -385,7 +385,7 @@ const AnnotatePage = () => {
                                 />
                             </div>
                         ))}
-                            </div>
+                    </div>
                 </ScrollArea>
                 <Separator className="pt-auto" />
                 {openDialog && (
@@ -416,44 +416,6 @@ const AnnotatePage = () => {
                     </div>
                 )}
             </div>
-            {/* <Modal
-                open={openDialog}
-                //onClose={}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={muiModalStyle}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Add Item
-                    </Typography>
-                    <Stack width="100%" direction={'row'} spacing={2}>
-                        <TextField
-                            id="outlined-basic"
-                            label="Item"
-                            variant="outlined"
-                            fullWidth
-                            value={textComment}
-                            onChange={(e) => setTextComment(e.target.value)}
-                        />
-                        <MUIButton
-                            variant="outlined"
-                            onClick={() => {
-                                handleSetComment()
-                                updateComments()
-                                setTextComment('')
-                                setOpenDialog(false)
-                            }}
-                        >
-                            Add
-                        </MUIButton>
-                        <MUIButton 
-                            variant="outlined"
-                            onClick={() => {setOpenDialog(false)}}>
-                            Cancel
-                        </MUIButton>
-                    </Stack>
-                </Box>
-            </Modal> */}
         </section>
     );
 };
