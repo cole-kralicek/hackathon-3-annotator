@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Comment from "@/components/Comment";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import {
     Select,
     SelectContent,
@@ -14,9 +15,21 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { MessageCircleMore, X } from "lucide-react";
 import { Box, Modal, Stack, TextField, Typography } from "@mui/material";
 import { Button as MUIButton } from "@mui/material"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+    File,
+    Image,
+    MessageCircleMore,
+    Trash,
+    Upload,
+    Video,
+    FileAudio,
+    X,
+    ExternalLink,
+} from "lucide-react";
+import Link from "next/link";
 
 
 const AnnotatePage = () => {
@@ -33,6 +46,7 @@ const AnnotatePage = () => {
         lastName: string,
         userImage: string,
         comment: Comment,
+        files: File[],
         tag: string,
     }
 
@@ -47,6 +61,8 @@ const AnnotatePage = () => {
     const [textArray, setTextArray] = useState<string[]>([]);
     // Name of file displayed
     const [fileName, setFileName] = useState<string>('');
+    // Comment file
+    const [files, setFiles] = useState<File[]>([]);
     // Save currrent highlighted words and indices
     const [highlightedText, setHighlightedText] = useState<string | null>();
     const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
@@ -89,7 +105,8 @@ const AnnotatePage = () => {
                 const result = e.target?.result;
                 if (typeof result === 'string') {
                     // Here I assume the line break is formatted like this for now
-                    const replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
+                    let replacement = result.replaceAll("\r\n\r\n", " \r\n\r\n ");
+                    replacement = replacement.replaceAll("'", "&apos;")
                     const wordsList = replacement.split(' ');
                     setTextArray(wordsList);
                     console.log(wordsList);
@@ -113,8 +130,9 @@ const AnnotatePage = () => {
         console.log("Comment map: ", commentMap)
         console.log("Last comment: ", lastComment)
         console.log("complete comments: ", completeComments)
+        console.log("comment files:", files)
 
-    }, [fileHighlights, allComments, commentMap, lastComment, completeComments])
+    }, [fileHighlights, allComments, commentMap, lastComment, completeComments, files])
 
     // For debugging current selected
     useEffect(() => {
@@ -160,6 +178,7 @@ const AnnotatePage = () => {
     const handleSetComment = () => {
         const newComment = { range: selectedIndices, color: tag.color, comment: textComment };
         setLastComment(newComment);
+        const filesCopy = files;
 
         const comment: DisplayedComment = {
             username: "me",
@@ -167,10 +186,11 @@ const AnnotatePage = () => {
             lastName: "last",
             userImage: "https://github.com/shadcn.png",
             comment: newComment,
+            files: filesCopy,
             tag: tag.tag,
         };
         const newArray = [...completeComments, comment];
-        setCompleteComments(newArray)
+        setCompleteComments(newArray);        
     }
 
     const updateComments = () => {
@@ -185,8 +205,23 @@ const AnnotatePage = () => {
             });
             return updatedComments;
         })
-        console.log("Last selected word indices:", selectedIndices);
+        console.log("Last selected word indices:", selectedIndices);     
+        setFiles([])   
     }
+
+    // Comment file functions
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = Array.from(event.target.files || []);
+        if (selectedFiles.length + files.length <= 3) {
+            setFiles([...files, ...selectedFiles]);
+        } else {
+            alert("You can only upload up to 3 files.");
+        }
+    };
+
+    const handleRemoveFile = (index: number) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
 
     const handleClickCommented = (index: number) => {
         // Find the corresponding comment based on the index
@@ -204,17 +239,6 @@ const AnnotatePage = () => {
             }
         }
     };
-
-    const comment = [
-        {
-            username: "JohnDoe",
-            firstName: "John",
-            lastName: "Doe",
-            userImage: "https://github.com/shadcn.png",
-            comment: "This is a comment",
-            tag: "Change",
-        },
-    ];
 
     // bg-[var(--card)] text-foreground
 
@@ -305,6 +329,7 @@ const AnnotatePage = () => {
                                     lastName={comment.lastName}
                                     userImage={comment.userImage}
                                     comment={comment.comment.comment}
+                                    files={comment.files}
                                     tag={comment.tag}
                                 />
                             </div>
@@ -332,6 +357,116 @@ const AnnotatePage = () => {
                                 <SelectItem value="Fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
+
+                        <div className="w-full flex flex-row gap-2 justify-between items-center h-auto">
+                            <div className="flex flex-row gap-1 w-3/4">
+                                {files.length > 0 &&
+                                    files.map((file, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-center justify-start w-1/4"
+                                        >
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px] cursor-pointer">
+                                                        {file.type.includes(
+                                                            "image"
+                                                        ) ? (
+                                                            <Image size={18} />
+                                                        ) : file.type.includes(
+                                                            "video"
+                                                        ) ? (
+                                                            <Video size={18} />
+                                                        ) : file.type.includes(
+                                                            "pdf"
+                                                        ) ? (
+                                                            <File size={18} />
+                                                        ) : file.type.includes(
+                                                            "audio"
+                                                        ) ? (
+                                                            <FileAudio
+                                                                size={18}
+                                                            />
+                                                        ) : (
+                                                            <File size={18} />
+                                                        )}
+                                                    </div>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent side="top">
+                                                    <div className="flex flex-col gap-1 p-2 max-w-[240px]">
+                                                        <p className="font-semibold text-sm">
+                                                            File: {file.name}
+                                                        </p>
+                                                        <p className="text-sm">
+                                                            Type: {file.type}
+                                                        </p>
+
+                                                        <Link
+                                                            href={URL.createObjectURL(
+                                                                file
+                                                            )}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs"
+                                                        >
+                                                            <Button
+                                                                type="button"
+                                                                className="flex items-center justify-center text-xs w-full mt-3"
+                                                            >
+                                                                Open
+                                                                <ExternalLink
+                                                                    size={14}
+                                                                    className="ml-2"
+                                                                />
+                                                            </Button>
+                                                        </Link>
+                                                        <Button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleRemoveFile(
+                                                                    index
+                                                                )
+                                                            }
+                                                            className="text-xs mt-2 flex items-center justify-center"
+                                                        >
+                                                            Remove{" "}
+                                                            <Trash
+                                                                size={14}
+                                                                className="ml-2"
+                                                            />
+                                                        </Button>
+                                                    </div>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+                                    ))}
+
+                                {files.length === 0 && (
+                                    <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px]">
+                                        <span className="text-sm text-muted-foreground">
+                                            No files
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                {files.length}/3
+                            </p>
+                            <div className="flex items-center justify-center rounded-md p-2 w-1/4 border-primary border-[1px] relative cursor-pointer">
+                                <Input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    multiple
+                                    accept="*"
+                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                    disabled={files.length >= 3}
+                                />
+                                <div className="flex items-center justify-center cursor-pointer">
+                                    <Upload size={18} />
+                                </div>
+                            </div>
+                        </div>
+
                         <Button className="w-full"
                             onClick={() => {
                                 handleSetComment()
@@ -339,6 +474,7 @@ const AnnotatePage = () => {
                                 setTextComment('')
                                 setSelectedIndices([])
                                 setOpenDialog(false)
+
                             }}
                         >Add Comment</Button>
                     </div>
@@ -381,6 +517,7 @@ const AnnotatePage = () => {
                                     lastName={comment.lastName}
                                     userImage={comment.userImage}
                                     comment={comment.comment.comment}
+                                    files={files}
                                     tag={comment.tag}
                                 />
                             </div>
@@ -407,11 +544,122 @@ const AnnotatePage = () => {
                                 <SelectItem value="fix">Fix</SelectItem>
                             </SelectContent>
                         </Select>
+
+                        <div className="w-full flex flex-row gap-2 justify-between items-center h-auto">
+                            <div className="flex flex-row gap-1 w-3/4">
+                                {files.length > 0 &&
+                                    files.map((file, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-center justify-start w-1/4"
+                                        >
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px] cursor-pointer">
+                                                        {file.type.includes(
+                                                            "image"
+                                                        ) ? (
+                                                            <Image size={18} />
+                                                        ) : file.type.includes(
+                                                            "video"
+                                                        ) ? (
+                                                            <Video size={18} />
+                                                        ) : file.type.includes(
+                                                            "pdf"
+                                                        ) ? (
+                                                            <File size={18} />
+                                                        ) : file.type.includes(
+                                                            "audio"
+                                                        ) ? (
+                                                            <FileAudio
+                                                                size={18}
+                                                            />
+                                                        ) : (
+                                                            <File size={18} />
+                                                        )}
+                                                    </div>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent side="top">
+                                                    <div className="flex flex-col gap-1 p-2 max-w-[240px]">
+                                                        <p className="font-semibold text-sm">
+                                                            File: {file.name}
+                                                        </p>
+                                                        <p className="text-sm">
+                                                            Type: {file.type}
+                                                        </p>
+
+                                                        <Link
+                                                            href={URL.createObjectURL(
+                                                                file
+                                                            )}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs"
+                                                        >
+                                                            <Button
+                                                                type="button"
+                                                                className="flex items-center justify-center text-xs w-full mt-3"
+                                                            >
+                                                                Open
+                                                                <ExternalLink
+                                                                    size={14}
+                                                                    className="ml-2"
+                                                                />
+                                                            </Button>
+                                                        </Link>
+                                                        <Button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleRemoveFile(
+                                                                    index
+                                                                )
+                                                            }
+                                                            className="text-xs mt-2 flex items-center justify-center"
+                                                        >
+                                                            Remove{" "}
+                                                            <Trash
+                                                                size={14}
+                                                                className="ml-2"
+                                                            />
+                                                        </Button>
+                                                    </div>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+                                    ))}
+
+                                {files.length === 0 && (
+                                    <div className="flex items-center justify-center w-full p-2 rounded-md border-[1px]">
+                                        <span className="text-sm text-muted-foreground">
+                                            No files
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                {files.length}/3
+                            </p>
+                            <div className="flex items-center justify-center rounded-md p-2 w-1/4 border-primary border-[1px] relative cursor-pointer">
+                                <Input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    multiple
+                                    accept="*"
+                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                    disabled={files.length >= 3}
+                                />
+                                <div className="flex items-center justify-center cursor-pointer">
+                                    <Upload size={18} />
+                                </div>
+                            </div>
+                        </div>
+
                         <Button className="w-full" onClick={() => {
                             handleSetComment()
                             updateComments()
                             setTextComment('')
                             setOpenDialog(false)
+                            //setFiles([]);
                         }}>Add Comment</Button>
                     </div>
                 )}
