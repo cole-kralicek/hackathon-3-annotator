@@ -29,7 +29,7 @@ const Nav = () => {
                     </Button>
                 </SignedOut>
                 <SignedIn>
-                    <Link href="/create">
+                    <Link href="/annotate">
                         <Button size="sm">Create Transcript</Button>
                     </Link>
                     <UserButton />
@@ -42,7 +42,7 @@ const Nav = () => {
                     </Button>
                 </SignedOut>
                 <SignedIn>
-                    <Link href="/create" className="mr-4">
+                    <Link href="/annotate" className="mr-4">
                         <Button size="sm">Create</Button>
                     </Link>
                     <UserButton />
