@@ -1,0 +1,44 @@
+
+Sales Rep: Good afternoon! I'm [Sales Rep Name], with [Company Name]. How are you today?
+
+Homeowner: I'm doing well, thank you. How about you?
+
+Sales Rep: I'm great, thanks for asking! I'm here to talk about your home's ventilation system. I understand you might be considering an upgrade?
+
+Homeowner: Yes, I’ve been thinking about it. Our current system is getting old, and I’m not sure it’s working as efficiently as it could.
+
+Sales Rep: That’s a common concern, especially with older systems. Upgrading your ventilation system can make a big difference in air quality and energy efficiency. Have you noticed any specific issues, like uneven temperatures or stale air?
+
+Homeowner: Actually, yes. Some rooms feel stuffy, especially the bedrooms. And our energy bills have been higher lately.
+
+Sales Rep: Those are clear signs that your system may not be operating optimally. A newer system could improve air circulation throughout your home, making it more comfortable and potentially lowering your energy costs. Would you like to hear about some options?
+
+Homeowner: Definitely. What are the options?
+
+Sales Rep: We have a few different systems depending on your needs. For example, we offer energy recovery ventilators (ERVs) and heat recovery ventilators (HRVs), which are great for improving air quality while also being energy efficient. They can help with the stuffiness you mentioned by bringing in fresh air while retaining heat in the winter and keeping cool air inside in the summer.
+
+Homeowner: That sounds interesting. How much would a system like that cost?
+
+Sales Rep: The cost can vary depending on the size of your home and the specific system you choose. On average, installation might range from $3,000 to $5,000, but we do offer financing options to make it more affordable.
+
+Homeowner: That’s something to think about. How long does the installation usually take?
+
+Sales Rep: Typically, installation takes just a day or two. We work efficiently to minimize disruption to your home. And after installation, you'll likely notice the difference in comfort and air quality right away.
+
+Homeowner: That’s good to know. I’m definitely interested. What’s the next step?
+
+Sales Rep: The next step would be to schedule an in-home assessment. One of our technicians would come out, take a look at your current system, and help you choose the best option for your home. It’s a no-obligation consultation, and it will give you a clear idea of what to expect.
+
+Homeowner: Okay, let’s go ahead and schedule that.
+
+Sales Rep: Great! I’ll get that set up for you. When would be a good time?
+
+Homeowner: I’m available on Thursday afternoon. Does that work?
+
+Sales Rep: Thursday afternoon works perfectly. I’ll put you down for 2:00 PM. You’ll receive a confirmation email shortly. We’re looking forward to helping you improve your home’s comfort!
+
+Homeowner: Thank you. I appreciate it.
+
+Sales Rep: My pleasure! We’ll see you on Thursday. Have a great day!
+
+Homeowner: You too!
