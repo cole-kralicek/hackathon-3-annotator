@@ -12,6 +12,7 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { File, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function UploadFile() {
     const [file, setFile] = useState(null);
@@ -75,7 +76,10 @@ export default function UploadFile() {
                         <Label htmlFor="file" className="hidden">
                             Choose a file
                         </Label>
-                        <div className="flex items-center justify-center w-[300px] h-32 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-100 cursor-pointer relative">
+                        <motion.div 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center justify-center w-[300px] h-32 p-4 border-2 rounded-lg bg-primary cursor-pointer relative">
                             <Input
                                 type="file"
                                 accept=".pdf, .txt"
@@ -83,13 +87,13 @@ export default function UploadFile() {
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                 // className="flex items-center justify-center text-center self-center w-[300px] h-32 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-100 cursor-pointer"
                             />
-                            <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-col items-center justify-center bg-primary">
                                 <Upload size={48} className="text-background" />
-                                <p className="mt-2 text-sm text-muted-foreground">
-                                    Upload PDF or TXT file
+                                <p className="mt-2 text-sm text-muted">
+                                    Upload PDF or TXT file.
                                 </p>    
                             </div>
-                        </div>
+                        </motion.div>
 
                         {error && (
                             <p className="text-red-500 text-sm text-center">
@@ -101,7 +105,7 @@ export default function UploadFile() {
                             disabled={fileLoading}
                             type="submit"
                             onClick={() => {}}
-                            className="w-full"
+                            className="w-full mt-4"
                         >
                             {fileLoading
                                 ? "Generating Transcript..."
