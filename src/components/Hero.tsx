@@ -45,21 +45,20 @@ const Hero = () => {
                 className="container flex flex-col items-center gap-8 pt-20 sm:gap-10"
                 variants={variants}
                 initial="hidden"
-                animate="animate"
+                animate="visible"
             >
                 <motion.div variants={childVariants}>
                     <Badge
-                        className="px-4 py-1 text-md gap-4"
-                        variant="secondary"
+                        className="px-4 py-1 text-lg font-light gap-4 text-primary bg-primary-foreground border-primary rounded-full"
                     >
-                        Introducing CardGenAI <ArrowRight />
+                        Introducing AnnotatorAI <ArrowRight />
                     </Badge>
                 </motion.div>
                 <motion.h1
                     variants={childVariants}
                     className="text-4xl font-heading font-semibold max-w-5xl text-center sm:text-5xl sm:leading-tight"
                 >
-                    Your Personal AI-Study Tool to Prepare Flashcards
+                    Your Personal Transcript Assistant
                 </motion.h1>
                 <motion.p
                     variants={childVariants}
@@ -76,16 +75,16 @@ const Hero = () => {
                         Learn More
                     </Button>
                     <Button size="lg">
-                        <Link href="/login">Get Started</Link>
+                        <Link href="/sign-up">Get Started</Link>
                     </Button>
                 </motion.div>
                 <motion.div
                     variants={childVariants}
                     className="relative sm:mt-8 mb-4 shadow-lg"
                 >
-                    <Image
+                    {/* <Image
                         className=" rounded-xl"
-                        src="/hero.png"
+                        src="https://github.com/shadcn.png"
                         alt="Hero Image"
                         fill={false}
                         width={0}
@@ -93,7 +92,7 @@ const Hero = () => {
                         sizes="100vw"
                         style={{ width: "1000px", height: "auto" }}
                         priority={true}
-                    />
+                    /> */}
                 </motion.div>
             </motion.section>
             <Features />

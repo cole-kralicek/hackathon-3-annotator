@@ -47,7 +47,7 @@ const CTA = () => {
             </motion.p>
             <motion.div variants={itemVariants}>
                 <Button size="lg" className="py-4 px-8 text-base border-border">
-                    <Link href="/login">Get Started</Link>
+                    <Link href="/sign-up">Get Started</Link>
                 </Button>
             </motion.div>
         </motion.section>
