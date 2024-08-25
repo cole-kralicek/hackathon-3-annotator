@@ -266,6 +266,7 @@ const AnnotatePage = () => {
                                                         <p className="text-sm">
                                                             Type: {file.type}
                                                         </p>
+
                                                         <Link
                                                             href={URL.createObjectURL(
                                                                 file
@@ -276,12 +277,12 @@ const AnnotatePage = () => {
                                                         >
                                                             <Button
                                                                 type="button"
-                                                                className="text-xs w-full mt-3"
+                                                                className="flex items-center justify-center text-xs w-full mt-3"
                                                             >
                                                                 Open
                                                                 <ExternalLink
                                                                     size={14}
-                                                                    className="ml-1"
+                                                                    className="ml-2"
                                                                 />
                                                             </Button>
                                                         </Link>
@@ -292,12 +293,12 @@ const AnnotatePage = () => {
                                                                     index
                                                                 )
                                                             }
-                                                            className="text-xs mt-2"
+                                                            className="text-xs mt-2 flex items-center justify-center"
                                                         >
                                                             Remove{" "}
                                                             <Trash
                                                                 size={14}
-                                                                className="ml-1"
+                                                                className="ml-2"
                                                             />
                                                         </Button>
                                                     </div>
@@ -464,14 +465,14 @@ const AnnotatePage = () => {
                                                             >
                                                                 <Button
                                                                     type="button"
-                                                                    className="text-xs w-full mt-3"
+                                                                    className="flex items-center justify-center text-xs w-full mt-3"
                                                                 >
                                                                     Open
                                                                     <ExternalLink
                                                                         size={
                                                                             14
                                                                         }
-                                                                        className="ml-1"
+                                                                        className="ml-2"
                                                                     />
                                                                 </Button>
                                                             </Link>
@@ -482,12 +483,12 @@ const AnnotatePage = () => {
                                                                         index
                                                                     )
                                                                 }
-                                                                className="text-xs mt-2"
+                                                                className="text-xs mt-2 flex items-center justify-center"
                                                             >
                                                                 Remove{" "}
                                                                 <Trash
                                                                     size={14}
-                                                                    className="ml-1"
+                                                                    className="ml-2"
                                                                 />
                                                             </Button>
                                                         </div>
