@@ -12,39 +12,32 @@ import { Badge } from "./ui/badge";
 
 const transcripts = [
     {
-        title: "Transcript 1",
-        description: "This is the first transcript",
-        created_by: "User 1",
+        title: "Sales Call Transcript",
+        description: "Sales call for a new product",
+        created_by: "Joe",
         number_comments: 3,
-        tags: ["tag1", "tag2", "tag3"],
+        tags: ["Change", "Fix"]
     },
     {
-        title: "Transcript 2",
-        description: "This is the second transcript",
-        created_by: "User 2",
+        title: "Research Interview Transcript",
+        description: "Research interview for a new product",
+        created_by: "Bob",
         number_comments: 5,
-        tags: ["tag1", "tag2", "tag3"],
+        tags: ["Improve", "Request"]
     },
     {
-        title: "Transcript 3",
-        description: "This is the third transcript",
-        created_by: "User 3",
+        title: "Restaurant Review Transcript",
+        description: "Marketing research for a new restaurant",
+        created_by: "Mark",
         number_comments: 2,
-        tags: ["tag1", "tag2", "tag3"],
+        tags: ["Change", "Fix", "Request"]
     },
     {
-        title: "Transcript 4",
-        description: "This is the fourth transcript",
-        created_by: "User 4",
+        title: "Sales Pitch Transcript",
+        description: "Sales pitch for a new product",
+        created_by: "Alice",
         number_comments: 7,
-        tags: ["tag1", "tag2", "tag3"],
-    },
-    {
-        title: "Transcript 5",
-        description: "This is the fifth transcript",
-        created_by: "User 5",
-        number_comments: 1,
-        tags: ["tag1", "tag2", "tag3"],
+        tags: ["Improve"]
     },
 ];
 
@@ -66,8 +59,8 @@ const Dashboard = () => {
                         <CardContent className="flex flex-col gap-4">
                             <div className="flex items-center gap-2">
                                 <Avatar>
-                                    <AvatarImage src="https://github.com/shadcn.png" />
-                                    <AvatarFallback>CN</AvatarFallback>
+                                    <AvatarImage src="" />
+                                    <AvatarFallback>{transcript.created_by[0]}</AvatarFallback>
                                 </Avatar>
 
                                 <span className="text-sm font-medium">
