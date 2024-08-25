@@ -6,46 +6,7 @@ import LLMSummary from "@/components/LLMSummary";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import LandingPage from "@/components/LandingPage";
 import Dashboard from "@/components/Dashboard";
-// import { auth, currentUser } from "@clerk/nextjs/server";
-// import { DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
-
-// // Ensure you have AWS credentials in your environment
-// const client = new DynamoDBClient({
-//     region: "us-west-1",
-//     credentials: {
-//         accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY || "",
-//         secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-//     },
-// });
-
-// async function main({userId, name, email}: {userId: string, name: string, email: string}) {
-//     try {
-//         const command = new ListTablesCommand({}); 
-//         const response = await client.send(command);
-//         console.log({ tables: response.TableNames });
-
-//         const putCommand = new PutItemCommand({
-//             TableName: "Users",
-//             Item: {
-//                 user_id: { S: userId },
-//                 name: { S: name },
-//                 email: { S: email },
-//             },
-//         });
-//         // const putResponse = await client.send(putCommand);
-
-//         const getCommand = new GetItemCommand({
-//             TableName: "Users",
-//             Key: {
-//                 user_id: { S: userId },
-//             },
-//         });
-//         const getResponse = await client.send(getCommand);
-//         console.log({ user: getResponse.Item });
-//     } catch (err) {
-//         console.error("Error fetching tables:", err);
-//     }
-// }
+import getUser from "@/lib/getUser";
 
 export default function Home() {
     // const user = await currentUser();
@@ -63,11 +24,141 @@ export default function Home() {
     // Highlight mode selection (aka words or partial)
     const [highlightFullWords, setHighlightFullWords] = useState<boolean>(true);
 
-    // useEffect(() => {
-    //     console.log("Hello");
-    //     const user = { userId: "123", name: "John Doe", email: "hello@gmail.com" };
-    //     main(user).catch(console.error);
-    // }, []);
+    useEffect(() => {
+        async function fetchTables() {
+            try {
+                const response = await fetch("/api/list-tables");
+                const data = await response.json();
+                console.log("Tables:", data.tables);
+            } catch (err) {
+                console.error("Error fetching tables:", err);
+            }
+        }
+
+        async function fetchTranscripts() {
+            try {
+                const userId = await getUser();
+
+                if (!userId) {
+                    console.error("User ID is required");
+                    return;
+                }
+
+                console.log("User ID:", userId);
+
+                const response = await fetch("/api/transcripts/" + userId);
+                const data = await response.json();
+                console.log("Transcripts:", data.transcripts);
+            } catch (err) {
+                console.error("Error fetching transcripts:", err);
+            }
+        }
+
+        async function fetchTranscript(transcriptId: string) {
+            try {
+                const userId = await getUser();
+
+                if (!userId) {
+                    console.error("User ID is required");
+                    return;
+                }
+
+                console.log("User ID:", userId);
+
+                const response = await fetch(`/api/transcripts/${userId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ userId, transcriptId }),
+                });
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                console.log("Transcript:", data);
+            } catch (error) {
+                console.error("Error fetching transcript:", error);
+            }
+        }
+
+        async function createTranscript() {
+            try {
+                const user_id = await getUser();
+
+                if (!user_id) {
+                    console.error("User ID is required");
+                    return;
+                }
+
+                console.log("User ID:", user_id);
+
+                const transcript = {
+                    transcript_id: "4",
+                    s3_url: "https://example.com/transcript",
+                    summary: "This is a summary",
+                };
+
+                const response = await fetch("/api/transcripts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ user_id, ...transcript }),
+                });
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                console.log("Transcript:", data);
+            } catch (error) {
+                console.error("Error creating transcript:", error);
+            }
+        }
+
+        async function updateTranscript() {
+            try {
+                const user_id = await getUser();
+
+                if (!user_id) {
+                    console.error("User ID is required");
+                    return;
+                }
+
+                console.log("User ID:", user_id);
+
+                const transcriptId = "1";
+                const s3_url = "https://example.com/transcript";
+                const summary = "This is an updated summary";
+
+                const response = await fetch(`/api/transcripts`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ user_id, transcriptId, s3_url, summary }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                console.log("Transcript:", data);
+            } catch (error) {
+                console.error("Error updating transcript:", error);
+            }
+        }
+
+
+        // fetchTables();
+        // fetchTranscripts();
+        // fetchTranscript("1");
+        // createTranscript();
+        // updateTranscript();
+    }, []);
 
     const handleTextSelect = (index: number) => {
         if (!highlightFullWords) {

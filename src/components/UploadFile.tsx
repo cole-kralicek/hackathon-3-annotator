@@ -22,11 +22,12 @@ export default function UploadFile() {
     const handleFileChange = (e: { target: { files: any } }) => {
         console.log("in file change ", e.target.files);
         const tempfile = e.target.files[0];
-        if (tempfile && tempfile.type === "application/pdf") {
+        console.log(tempfile);
+        if (tempfile && tempfile.type === "text/plain") {
             setFile(tempfile);
             setError("");
         } else {
-            setError("Please upload a valid PDF file.");
+            setError("Please upload a valid TXT file.");
         }
     };
 
@@ -67,7 +68,7 @@ export default function UploadFile() {
                 <CardHeader>
                     <CardTitle>Upload File</CardTitle>
                     <CardDescription>
-                        Upload a TXT/PDF File with content to generate
+                        Upload a TXT File with content to generate
                         transcript
                     </CardDescription>
                 </CardHeader>
@@ -90,7 +91,7 @@ export default function UploadFile() {
                             <div className="flex flex-col items-center justify-center bg-primary">
                                 <Upload size={48} className="text-background" />
                                 <p className="mt-2 text-sm text-muted">
-                                    Upload PDF or TXT file.
+                                    Upload TXT file.
                                 </p>    
                             </div>
                         </motion.div>
