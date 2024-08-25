@@ -48,6 +48,8 @@ async function callOpenRouter(data) {
   }
 }
 
+module.exports = { callOpenRouter }
+
 // Call the function to make the API request
 const data = readTxtFile(filepa)
 callOpenRouter(data);

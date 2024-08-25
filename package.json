@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.3.3",
+    "aws-sdk": "^2.1682.0",
     "axios": "^1.7.5",
     "dotenv": "^16.4.5",
     "next": "14.2.6",
